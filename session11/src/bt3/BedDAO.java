@@ -22,9 +22,9 @@ public class BedDAO {
             int rowsAffected = ps.executeUpdate();
 
             if (rowsAffected > 0) {
-                System.out.println("✅ Cập nhật trạng thái giường thành công!");
+                System.out.println(" Cập nhật trạng thái giường thành công!");
             } else {
-                System.out.println("❌ Mã giường không tồn tại!");
+                System.out.println("Mã giường không tồn tại!");
             }
 
         } catch (Exception e) {
