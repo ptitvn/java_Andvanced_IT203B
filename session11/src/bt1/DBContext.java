@@ -1,4 +1,4 @@
-package src.bt1;
+package bt1;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -6,22 +6,26 @@ import java.sql.SQLException;
 
 public class DBContext {
 
-    private static final String DB_URL = "jdbc:mysql://localhost:3306/Hospital_DB";
-    private static final String DB_USER = "root";
-    private static final String DB_PASSWORD = "123456";
+    private static final String URL = "jdbc:mysql://localhost:3306/Hospital_DB";
+    private static final String USER = "root";
+    private static final String PASSWORD = "123456";
 
     public static Connection getConnection() throws SQLException {
-        return DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver"); // fix lỗi driver
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return DriverManager.getConnection(URL, USER, PASSWORD);
     }
 
     public static void closeConnection(Connection conn) {
-        if (conn != null) {
-            try {
+        try {
+            if (conn != null && !conn.isClosed()) {
                 conn.close();
-                System.out.println("Closed connection");
-            } catch (SQLException e) {
-                e.printStackTrace();
             }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 }

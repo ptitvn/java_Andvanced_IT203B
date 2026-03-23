@@ -1,9 +1,8 @@
-package src.bt1;
+package bt1;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 
 public class PatientDAO {
 
@@ -20,18 +19,18 @@ public class PatientDAO {
             rs = ps.executeQuery();
 
             while (rs.next()) {
-                System.out.println("ID: " + rs.getInt("id"));
-                System.out.println("Name: " + rs.getString("name"));
+                System.out.println(rs.getString("name"));
             }
 
-        } catch (SQLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         } finally {
+            // Đóng theo thứ tự ngược
             try {
                 if (rs != null) rs.close();
                 if (ps != null) ps.close();
                 DBContext.closeConnection(conn);
-            } catch (SQLException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }

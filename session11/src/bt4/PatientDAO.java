@@ -1,4 +1,4 @@
-package src.bt4;
+package bt4;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -6,29 +6,46 @@ import java.sql.Statement;
 
 public class PatientDAO {
 
-    public void findPatientByName(String patientName) {
+    // ===== HÀM LỌC INPUT =====
+    public String sanitizeInput(String input) {
+        if (input == null) return null;
+
+        input = input.replace("'", "");
+        input = input.replace("--", "");
+        input = input.replace(";", "");
+
+        return input;
+    }
+
+    // ===== TÌM KIẾM BỆNH NHÂN =====
+    public void findPatientByName(String name) {
+
         Connection conn = null;
         Statement stmt = null;
         ResultSet rs = null;
 
         try {
-            // Kiểm tra SQL Injection
-            if (patientName.contains("'") ||
-                    patientName.contains("--") ||
-                    patientName.contains(";")) {
-
-                System.out.println("Phát hiện SQL Injection! Không thực hiện truy vấn.");
-                return;
-            }
-
             conn = DBContext.getConnection();
             stmt = conn.createStatement();
 
-            String sql = "SELECT * FROM Patients WHERE full_name = '" + patientName + "'";
+            // LỌC INPUT
+            name = sanitizeInput(name);
+
+            String sql = "SELECT * FROM Patients WHERE full_name = '" + name + "'";
+
             rs = stmt.executeQuery(sql);
 
+            System.out.println("=== KẾT QUẢ ===");
+
+            boolean found = false;
+
             while (rs.next()) {
-                System.out.println("Tên bệnh nhân: " + rs.getString("full_name"));
+                found = true;
+                System.out.println("Tên: " + rs.getString("full_name"));
+            }
+
+            if (!found) {
+                System.out.println("❌ Không tìm thấy bệnh nhân!");
             }
 
         } catch (Exception e) {

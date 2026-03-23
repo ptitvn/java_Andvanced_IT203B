@@ -1,5 +1,4 @@
-
-package src.bt2;
+package bt2;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -7,22 +6,32 @@ import java.sql.SQLException;
 
 public class DBContext {
 
-    private static final String DB_URL = "jdbc:mysql://localhost:3306/hospital_db";
-    private static final String DB_USER = "root";
-    private static final String DB_PASSWORD = "123456";
+    private static final String URL = "jdbc:mysql://localhost:3306/Hospital_DB?useSSL=false&serverTimezone=UTC";
+    private static final String USER = "root";
+    private static final String PASSWORD = "123456";
+
+    static {
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            System.out.println(">> Load Driver OK");
+        } catch (ClassNotFoundException e) {
+            System.err.println(">> Load Driver FAIL");
+            e.printStackTrace();
+        }
+    }
 
     public static Connection getConnection() throws SQLException {
-        return DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
+        return DriverManager.getConnection(URL, USER, PASSWORD);
     }
 
     public static void closeConnection(Connection conn) {
-        if (conn != null) {
-            try {
+        try {
+            if (conn != null && !conn.isClosed()) {
                 conn.close();
-                System.out.println("Closed connection");
-            } catch (SQLException e) {
-                e.printStackTrace();
+                System.out.println(">> Closed connection");
             }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 }

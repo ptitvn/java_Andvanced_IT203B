@@ -1,4 +1,4 @@
-package src.btth;
+package btth;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
